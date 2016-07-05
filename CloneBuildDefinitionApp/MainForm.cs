@@ -20,15 +20,15 @@ namespace CloneBuildDefinitionApp
         {
             base.OnLoad(e);
 
-            ddlBuildDefinition.DataSource = FormContext.Current.BuildDefinitions?.ToArray();
+            ddlBuildDefinition.DataSource = FormContext.Current.BuildDefinitions?.OrderBy(o => o.Name).ToArray();
             ddlBuildDefinition.DisplayMember = "Name";
             ddlBuildDefinition.ValueMember = "Id";
 
-            ddlDestinationProject.DataSource = FormContext.Current.Projects?.ToArray();
+            ddlDestinationProject.DataSource = FormContext.Current.Projects?.OrderBy(o => o.Name).ToArray();
             ddlDestinationProject.DisplayMember = "Name";
             ddlDestinationProject.ValueMember = "Id";
 
-            ddlSourceProject.DataSource = FormContext.Current.Projects?.ToArray();
+            ddlSourceProject.DataSource = FormContext.Current.Projects?.OrderBy(o => o.Name).ToArray();
             ddlSourceProject.DisplayMember = "Name";
             ddlSourceProject.ValueMember = "Id";
         }
@@ -80,7 +80,7 @@ namespace CloneBuildDefinitionApp
             }
 
             FormContext.Current.BuildDefinitions = _definitionService.GetBuildDefinitions(definition.Id);
-            ddlBuildDefinition.DataSource = FormContext.Current.BuildDefinitions?.ToArray();
+            ddlBuildDefinition.DataSource = FormContext.Current.BuildDefinitions?.OrderBy(o => o.Name).ToArray();
         }
     }
 }
