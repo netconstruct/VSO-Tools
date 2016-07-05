@@ -1,35 +1,35 @@
 ﻿using System;
-using Microsoft.TeamFoundation.Build.WebApi;
 using Microsoft.VisualStudio.Services.Common;
+using Microsoft.VisualStudio.Services.ReleaseManagement.WebApi;
+using Microsoft.VisualStudio.Services.ReleaseManagement.WebApi.Clients;
 
-namespace CloneBuildDefinition
+namespace CloneReleaseDefinition
 {
     internal class Program
     {
-        private static void CloneBuild(string hostName, int buildDef, string accessToken, string sourceProject, string destinationProject)
+        private static void CloneRelease(string hostName, int releaseDef, string accessToken, string sourceProject, string destinationProject)
         {
-            var buildClient = CreateClient(hostName, accessToken);
+            var releaseClient = CreateClient(hostName, accessToken);
 
-            var definition = GetBuildDefinition(buildDef, sourceProject, buildClient);
+            var definition = GetReleaseDefinition(releaseDef, sourceProject, releaseClient);
 
             definition.Name = definition.Name + "Clone";
-            definition.Project = null;
 
-            var ress = buildClient.CreateDefinitionAsync(definition, destinationProject);
+            var ress = releaseClient.CreateReleaseDefinitionAsync(definition, destinationProject);
             ress.Wait();
         }
 
-        private static BuildHttpClient CreateClient(string hostName, string accessToken)
+        private static ReleaseHttpClient CreateClient(string hostName, string accessToken)
         {
             var collectionUri = new Uri($"https://{hostName}/DefaultCollection", UriKind.Absolute);
             var cred = new VssBasicCredential(string.Empty, accessToken);
-            var buildClient = new BuildHttpClient(collectionUri, cred);
-            return buildClient;
+            var releaseClient = new ReleaseHttpClient(collectionUri, cred);
+            return releaseClient;
         }
 
-        private static BuildDefinition GetBuildDefinition(int buildDef, string sourceProject, BuildHttpClientBase buildClient)
+        private static ReleaseDefinition GetReleaseDefinition(int releaseDef, string sourceProject, ReleaseHttpClient releaseClient)
         {
-            var definitionAsync = buildClient.GetDefinitionAsync(sourceProject, buildDef);
+            var definitionAsync = releaseClient.GetReleaseDefinitionAsync(sourceProject, releaseDef);
             definitionAsync.Wait();
             var definition = definitionAsync.Result;
             return definition;
@@ -38,14 +38,14 @@ namespace CloneBuildDefinition
         private static void Main(string[] args)
         {
             var hostName = args[0];
-            var buildDef = int.Parse(args[1]);
+            var releaseDef = int.Parse(args[1]);
             var sourceProject = args[2];
             var destinationProject = args[3];
             var accessToken = args[4];
 
             try
             {
-                CloneBuild(hostName, buildDef, accessToken, sourceProject, destinationProject);
+                CloneRelease(hostName, releaseDef, accessToken, sourceProject, destinationProject);
             }
             catch (AggregateException ex)
             {
