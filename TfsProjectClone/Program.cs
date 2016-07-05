@@ -2,7 +2,7 @@
 using Microsoft.TeamFoundation.Build.WebApi;
 using Microsoft.VisualStudio.Services.Common;
 
-namespace TfsProjectClone
+namespace CloneBuildDefinition
 {
     internal class Program
     {
