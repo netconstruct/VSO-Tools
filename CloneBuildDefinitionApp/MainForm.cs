@@ -64,6 +64,8 @@ namespace CloneBuildDefinitionApp
             definition.Project = null;
 
             _definitionService.CreateBuildDefinition(destinationProject.Id, definition);
+
+            MessageBox.Show("Success");
         }
 
         private void ddlSourceProject_SelectedIndexChanged(object sender, EventArgs e)
